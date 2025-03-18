@@ -1,16 +1,17 @@
 from fastapi import FastAPI, File, UploadFile
-from file_handler import FileHandler  # Import the wrapper class
+from manager import Manager  # Import the Manager class
 
 app = FastAPI()
+manager = Manager()  # Create an instance of Manager
 
 @app.post("/upload/")
 async def upload_file(file: UploadFile = File(...)):
-    file_path = FileHandler.save_file(file)
+    file_path = manager.save_file(file)
     return {"filename": file.filename, "path": file_path, "status": "uploaded successfully"}
 
 @app.get("/files/")
 def list_files():
-    files = FileHandler.get_file_list()
+    files = manager.get_file_list()
     return {"files": files}
 
 if __name__ == "__main__":
